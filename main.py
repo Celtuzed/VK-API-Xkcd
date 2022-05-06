@@ -56,11 +56,11 @@ def get_groups(access_token):
     pprint(groups)
 
 
-def get_upload_url(access_token):
+def get_upload_url(access_token, group_id):
 
     url = "https://api.vk.com/method/photos.getWallUploadServer/"
     params = {
-            "group_id" : 212792668,
+            "group_id" : group_id,
             "access_token" : access_token,
             "v" : "5.131"
     }
@@ -69,13 +69,13 @@ def get_upload_url(access_token):
     return upload_url
 
 
-def upload_comics(access_token):
+def upload_comics(access_token, group_id):
 
     with open("comics_image.png", "rb") as file:
 
-        upload_url = get_upload_url(access_token)
+        upload_url = get_upload_url(access_token, group_id)
         params = {
-            "group_id" : 212792668,
+            "group_id" : group_id,
             "access_token" : access_token,
             "v" : "5.131"
         }
@@ -88,11 +88,11 @@ def upload_comics(access_token):
         return information
 
 
-def get_photo_id(access_token):
+def get_photo_id(access_token, group_id):
     url = "https://api.vk.com/method/photos.saveWallPhoto"
-    information = upload_comics(access_token)
+    information = upload_comics(access_token, group_id)
     params = {
-            "group_id" : 212792668,
+            "group_id" : group_id,
             "access_token" : access_token,
             "v" : "5.131",
             "photo" : information['photo'],
@@ -101,19 +101,19 @@ def get_photo_id(access_token):
     }
     response = requests.post(url, params)
     photo = response.json()["response"]
+    print(photo)
     photo_id = photo[0]["id"]
-    owner_id = 691176717
+    owner_id = photo[0]["owner_id"]
     return photo_id, owner_id
 
 
-def upload_on_wall_comics(access_token):
+def upload_on_wall_comics(access_token, group_id):
 
     comments = get_comics_information()
-    group_id = -212792668
-    photo_id, owner_id = get_photo_id(access_token)
+    photo_id, owner_id = get_photo_id(access_token, group_id)
     url = "https://api.vk.com/method/wall.post"
     params = {
-        "owner_id" : group_id,
+        "owner_id" : f"-{group_id}",
         "access_token" : access_token,
         "v" : "5.131",
         "from_group" : 1,
@@ -132,4 +132,7 @@ if __name__ == '__main__':
     url = "https://oauth.vk.com/authorize"
     client_id = os.getenv("CLIENT_ID")
     access_token = os.getenv("ACCESS_TOKEN")
-    upload_on_wall_comics(access_token)
+    group_id = os.getenv("GROUP_ID")
+    owner_id = os.getenv("OWNER_ID")
+
+    upload_on_wall_comics(access_token, group_id)

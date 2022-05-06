@@ -40,7 +40,6 @@ def get_uri(url, client_id):
             "revoke" : "1",
     }
     response = requests.get(url, params)
-    print(response.url)
 
 
 def get_groups(access_token):
@@ -53,7 +52,6 @@ def get_groups(access_token):
     }
     response = requests.get(url, params)
     groups = response.json()["response"]["items"]
-    pprint(groups)
 
 
 def get_upload_url(access_token, group_id):
@@ -64,8 +62,10 @@ def get_upload_url(access_token, group_id):
             "access_token" : access_token,
             "v" : "5.131"
     }
+
     response = requests.get(url, params)
     upload_url = response.json()["response"]["upload_url"]
+
     return upload_url
 
 
@@ -74,23 +74,29 @@ def upload_comics(access_token, group_id):
     with open("comics_image.png", "rb") as file:
 
         upload_url = get_upload_url(access_token, group_id)
+
         params = {
             "group_id" : group_id,
             "access_token" : access_token,
             "v" : "5.131"
         }
+
         files = {
                 "file1" : file
         }
+
         response = requests.post(upload_url, params=params, files=files)
         response.raise_for_status()
         information = response.json()
-        return information
+
+    return information
 
 
 def get_photo_id(access_token, group_id):
+
     url = "https://api.vk.com/method/photos.saveWallPhoto"
     information = upload_comics(access_token, group_id)
+
     params = {
             "group_id" : group_id,
             "access_token" : access_token,
@@ -99,11 +105,12 @@ def get_photo_id(access_token, group_id):
             "server" : information['server'],
             "hash" : information['hash']
     }
+
     response = requests.post(url, params)
     photo = response.json()["response"]
-    print(photo)
     photo_id = photo[0]["id"]
     owner_id = photo[0]["owner_id"]
+
     return photo_id, owner_id
 
 
@@ -112,6 +119,7 @@ def upload_on_wall_comics(access_token, group_id):
     comments = get_comics_information()
     photo_id, owner_id = get_photo_id(access_token, group_id)
     url = "https://api.vk.com/method/wall.post"
+
     params = {
         "owner_id" : f"-{group_id}",
         "access_token" : access_token,
@@ -120,9 +128,10 @@ def upload_on_wall_comics(access_token, group_id):
         "message" : comments,
         "attachments" : f"photo{owner_id}_{photo_id}"
     }
+
     response = requests.post(url, params)
     response.raise_for_status()
-    pprint(response.json())
+
     os.remove("comics_image.png")
 
 

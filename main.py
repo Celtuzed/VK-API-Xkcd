@@ -46,30 +46,6 @@ def download_image(img_link):
         file.write(response.content)
 
 
-def get_uri(url, client_id):
-
-    params = {
-            "client_id": client_id,
-            "display": "page",
-            "scope": "photos,groups,wall,offline",
-            "response_type": "token",
-            "revoke": "1",
-    }
-    response = requests.get(url, params)
-
-
-def get_groups(access_token):
-
-    url = "https://api.vk.com/method/groups.get/"
-    params = {
-            "access_token": access_token,
-            "v": "5.131",
-            "extended": "1"
-    }
-    response = requests.get(url, params)
-    groups = response.json()["response"]["items"]
-
-
 def get_upload_url(access_token, group_id):
 
     url = "https://api.vk.com/method/photos.getWallUploadServer/"
@@ -155,7 +131,6 @@ def upload_on_wall_comics(access_token, group_id):
 if __name__ == '__main__':
     load_dotenv()
 
-    url = "https://oauth.vk.com/authorize"
     client_id = os.getenv("CLIENT_ID")
     access_token = os.getenv("ACCESS_TOKEN")
     group_id = os.getenv("GROUP_ID")

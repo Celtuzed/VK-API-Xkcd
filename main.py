@@ -131,7 +131,7 @@ def get_photo_id(access_token, group_id):
 
 def upload_on_wall_comics(access_token, group_id):
 
-    comments = get_comics_information()
+    comments = get_random_comics()
     photo_id, owner_id = get_photo_id(access_token, group_id)
     url = "https://api.vk.com/method/wall.post"
 

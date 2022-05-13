@@ -5,14 +5,21 @@ import random
 from dotenv import load_dotenv
 from pprint import pprint
 
-def get_comics_information():
+def get_random_comics_number():
 
     response = requests.get("https://xkcd.com/info.0.json")
     response.raise_for_status()
     max_num = response.json()["num"]
-    random_num = random.randint(1, max_num)
 
-    comics = requests.get(f"https://xkcd.com/{random_num}/info.0.json").json()
+    return random.randint(1, max_num)
+
+
+def get_random_comics():
+
+    random_num = get_random_comics_number()
+    response = requests.get(f"https://xkcd.com/{random_num}/info.0.json")
+    response.raise_for_status()
+    comics = response.json()
     img_link = comics['img']
     comments = comics['alt']
 

@@ -5,6 +5,14 @@ import random
 from dotenv import load_dotenv
 from pprint import pprint
 
+
+def check_status(response):
+    if response.raise_for_status():
+        raise requests.HTTPError
+    elif "error" in response.json():
+        raise requests.exceptions.HTTPError(response.json()['error'])
+
+
 def get_random_comics_number():
 
     response = requests.get("https://xkcd.com/info.0.json")

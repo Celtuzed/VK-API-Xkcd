@@ -3,6 +3,7 @@ books/
 images/
 pages/
 index.html
+.vscode
 *.png
 
 # Byte-compiled / optimized / DLL files

@@ -27,7 +27,7 @@ def get_random_comics():
     random_num = get_random_comics_number()
     response = requests.get(f"https://xkcd.com/{random_num}/info.0.json")
     response.raise_for_status()
-    
+
     comics = response.json()
     img_link = comics['img']
     comments = comics['alt']

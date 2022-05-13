@@ -27,6 +27,7 @@ def get_random_comics():
     random_num = get_random_comics_number()
     response = requests.get(f"https://xkcd.com/{random_num}/info.0.json")
     response.raise_for_status()
+    
     comics = response.json()
     img_link = comics['img']
     comments = comics['alt']
@@ -79,6 +80,7 @@ def get_upload_url(access_token, group_id):
     }
 
     response = requests.get(url, params)
+    check_status(response)
     upload_url = response.json()["response"]["upload_url"]
 
     return upload_url
@@ -101,7 +103,7 @@ def upload_comics(access_token, group_id):
         }
 
         response = requests.post(upload_url, params=params, files=files)
-        response.raise_for_status()
+        check_status(response)
         information = response.json()
 
     return information
@@ -145,7 +147,7 @@ def upload_on_wall_comics(access_token, group_id):
     }
 
     response = requests.post(url, params)
-    response.raise_for_status()
+    check_status(response)
 
     os.remove("comics_image.png")
 

@@ -3,7 +3,6 @@ import json
 import os
 import random
 from dotenv import load_dotenv
-from pprint import pprint
 
 
 def check_status(response):

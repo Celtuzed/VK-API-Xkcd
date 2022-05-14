@@ -119,7 +119,7 @@ def upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id):
     os.remove("comics_image.png")
 
 
-if __name__ == '__main__':
+def main():
     load_dotenv()
 
     client_id = os.getenv("CLIENT_ID")
@@ -132,4 +132,8 @@ if __name__ == '__main__':
     information = upload_comics(access_token, group_id, upload_url)
     photo_id, owner_id = get_ids(access_token, group_id, information)
 
-    upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id)
+    upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id)    
+
+
+if __name__ == '__main__':
+    main()

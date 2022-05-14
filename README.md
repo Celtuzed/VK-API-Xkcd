@@ -20,12 +20,9 @@ pip install -r requirements.txt
 
 Для использования скрипта необходимо создать `.env` файл, и по примеру ввести все необходимые данные:
 ```
-CLIENT_ID=......
 ACCESS_TOKEN=......
 GROUP_ID=......
 ```  
-
-`CLIENT_ID` - Это ID приложения в вк.
 
 `ACCESS_TOKEN` - Токен, который нужно будет получить, следуя [инструкции](https://vk.com/dev/implicit_flow_user).
 

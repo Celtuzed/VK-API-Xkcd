@@ -122,7 +122,6 @@ def upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id):
 def main():
     load_dotenv()
 
-    client_id = os.getenv("CLIENT_ID")
     access_token = os.getenv("ACCESS_TOKEN")
     group_id = os.getenv("GROUP_ID")
 

@@ -21,9 +21,8 @@ def get_random_comics_number():
     return random.randint(1, max_num)
 
 
-def get_random_comics():
+def get_random_comics(random_num):
 
-    random_num = get_random_comics_number()
     response = requests.get(f"https://xkcd.com/{random_num}/info.0.json")
     response.raise_for_status()
 
@@ -127,7 +126,8 @@ if __name__ == '__main__':
     access_token = os.getenv("ACCESS_TOKEN")
     group_id = os.getenv("GROUP_ID")
 
-    comments = get_random_comics()
+    random_num = get_random_comics_number()
+    comments = get_random_comics(random_num)
     upload_url = get_upload_url(access_token, group_id)
     information = upload_comics(access_token, group_id, upload_url)
     photo_id, owner_id = get_ids(access_token, group_id, information)

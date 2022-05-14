@@ -56,16 +56,13 @@ def get_upload_url(access_token, group_id):
 
     response = requests.get(url, params)
     check_status(response)
-    upload_url = response.json()["response"]["upload_url"]
 
-    return upload_url
+    return response.json()["response"]["upload_url"]
 
 
-def upload_comics(access_token, group_id):
+def upload_comics(access_token, group_id, upload_url):
 
     with open("comics_image.png", "rb") as file:
-
-        upload_url = get_upload_url(access_token, group_id)
 
         params = {
             "group_id": group_id,
@@ -79,15 +76,13 @@ def upload_comics(access_token, group_id):
 
         response = requests.post(upload_url, params=params, files=files)
         check_status(response)
-        information = response.json()
 
-    return information
+    return response.json()
 
 
-def get_photo_id(access_token, group_id):
+def get_ids(access_token, group_id, information):
 
     url = "https://api.vk.com/method/photos.saveWallPhoto"
-    information = upload_comics(access_token, group_id)
 
     params = {
             "group_id": group_id,
@@ -106,10 +101,8 @@ def get_photo_id(access_token, group_id):
     return photo_id, owner_id
 
 
-def upload_on_wall_comics(access_token, group_id):
+def upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id):
 
-    comments = get_random_comics()
-    photo_id, owner_id = get_photo_id(access_token, group_id)
     url = "https://api.vk.com/method/wall.post"
 
     params = {
@@ -133,6 +126,10 @@ if __name__ == '__main__':
     client_id = os.getenv("CLIENT_ID")
     access_token = os.getenv("ACCESS_TOKEN")
     group_id = os.getenv("GROUP_ID")
-    owner_id = os.getenv("OWNER_ID")
 
-    upload_on_wall_comics(access_token, group_id)
+    comments = get_random_comics()
+    upload_url = get_upload_url(access_token, group_id)
+    information = upload_comics(access_token, group_id, upload_url)
+    photo_id, owner_id = get_ids(access_token, group_id, information)
+
+    upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id)

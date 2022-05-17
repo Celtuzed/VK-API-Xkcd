@@ -5,17 +5,18 @@ import random
 from dotenv import load_dotenv
 
 
-def check_status(response):
+def check_status(response, response_json):
     if response.raise_for_status():
         raise requests.HTTPError
-    elif "error" in response.json():
-        raise requests.exceptions.HTTPError(response.json()['error'])
+    elif "error" in response_json:
+        raise requests.exceptions.HTTPError(response_json['error'])
 
 
 def get_random_comics_number():
 
     response = requests.get("https://xkcd.com/info.0.json")
-    response.raise_for_status()
+    response_json = response.json()
+    check_status(response, response_json)
     max_num = response.json()["num"]
 
     return random.randint(1, max_num)
@@ -24,7 +25,8 @@ def get_random_comics_number():
 def get_random_comics(random_num):
 
     response = requests.get(f"https://xkcd.com/{random_num}/info.0.json")
-    response.raise_for_status()
+    response_json = response.json()
+    check_status(response, response_json)
 
     comics = response.json()
     img_link = comics['img']
@@ -38,7 +40,6 @@ def get_random_comics(random_num):
 def download_image(img_link):
 
     response = requests.get(img_link)
-    response.raise_for_status()
 
     with open("comics_image.png", "wb") as file:
         file.write(response.content)
@@ -54,9 +55,10 @@ def get_upload_url(access_token, group_id):
     }
 
     response = requests.get(url, params)
-    check_status(response)
+    response_json = response.json()
+    check_status(response, response_json)
 
-    return response.json()["response"]["upload_url"]
+    return response_json["response"]["upload_url"]
 
 
 def upload_comics(access_token, group_id, upload_url):
@@ -74,7 +76,8 @@ def upload_comics(access_token, group_id, upload_url):
         }
 
         response = requests.post(upload_url, params=params, files=files)
-        check_status(response)
+        response_json = response.json()
+        check_status(response, response_json)
 
     return response.json()
 
@@ -93,6 +96,9 @@ def get_ids(access_token, group_id, information):
     }
 
     response = requests.post(url, params)
+    response_json = response.json()
+    check_status(response, response_json)
+    
     photo = response.json()["response"]
     photo_id = photo[0]["id"]
     owner_id = photo[0]["owner_id"]
@@ -114,7 +120,8 @@ def upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id):
     }
 
     response = requests.post(url, params)
-    check_status(response)
+    response_json = response.json()
+    check_status(response, response_json)
 
 
 def main():

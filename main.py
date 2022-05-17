@@ -123,13 +123,16 @@ def main():
     access_token = os.getenv("ACCESS_TOKEN")
     group_id = os.getenv("GROUP_ID")
 
-    random_num = get_random_comics_number()
-    comments = get_random_comics(random_num)
-    upload_url = get_upload_url(access_token, group_id)
-    information = upload_comics(access_token, group_id, upload_url)
-    photo_id, owner_id = get_ids(access_token, group_id, information)
+    try:
+        random_num = get_random_comics_number()
+        comments = get_random_comics(random_num)
+        upload_url = get_upload_url(access_token, group_id)
+        information = upload_comics(access_token, group_id, upload_url)
+        photo_id, owner_id = get_ids(access_token, group_id, information)
 
-    upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id)
+        upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id)
+    except Exception as error:
+        print(error)
 
     os.remove("comics_image.png")
 

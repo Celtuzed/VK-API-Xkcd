@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 
 def check_status(response, response_json):
-    if response.raise_for_status():
+    if not response.ok():
         raise requests.HTTPError
     elif "error" in response_json:
         raise requests.exceptions.HTTPError(response_json['error'])

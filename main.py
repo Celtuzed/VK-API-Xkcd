@@ -76,7 +76,7 @@ def upload_comics(access_token, group_id, upload_url):
         response = requests.post(upload_url, params=params, files=files)
         response_details = response.json()
         response.raise_for_status()
-        check_status(response, response_details)
+        check_status(response_details)
 
     return response_details
 
@@ -97,7 +97,7 @@ def get_ids(access_token, group_id, information):
     response = requests.post(url, params)
     response_details = response.json()
     response.raise_for_status()
-    check_status(response, response_details)
+    check_status(response_details)
     
     photo = response_details["response"]
     photo_id = photo[0]["id"]
@@ -122,7 +122,7 @@ def upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id):
     response = requests.post(url, params)
     response_details = response.json()
     response.raise_for_status()
-    check_status(response, response_details)
+    check_status(response_details)
 
 
 def main():

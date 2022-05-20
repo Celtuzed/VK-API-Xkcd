@@ -139,10 +139,8 @@ def main():
         photo_id, owner_id = get_ids(access_token, group_id, information)
 
         upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id)
-    except Exception as error:
-        print(error)
-
-    os.remove("comics_image.png")
+    finally:
+        os.remove("comics_image.png")
 
 if __name__ == '__main__':
     main()

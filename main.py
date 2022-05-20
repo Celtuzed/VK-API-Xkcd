@@ -5,9 +5,9 @@ import random
 from dotenv import load_dotenv
 
 
-def check_status(response_json):
-    if "error" in response_json:
-        raise requests.exceptions.HTTPError(response_json['error'])
+def check_status(response_details):
+    if "error" in response_details:
+        raise requests.exceptions.HTTPError(response_details['error'])
 
 
 def get_random_comics_number():
@@ -52,11 +52,11 @@ def get_upload_url(access_token, group_id):
     }
 
     response = requests.get(url, params)
-    response_json = response.json()
+    response_details = response.json()
     response.raise_for_status()
-    check_status(response_json)
+    check_status(response_details)
 
-    return response_json["response"]["upload_url"]
+    return response_details["response"]["upload_url"]
 
 
 def upload_comics(access_token, group_id, upload_url):
@@ -74,11 +74,11 @@ def upload_comics(access_token, group_id, upload_url):
         }
 
         response = requests.post(upload_url, params=params, files=files)
-        response_json = response.json()
+        response_details = response.json()
         response.raise_for_status()
-        check_status(response, response_json)
+        check_status(response, response_details)
 
-    return response_json
+    return response_details
 
 
 def get_ids(access_token, group_id, information):
@@ -95,11 +95,11 @@ def get_ids(access_token, group_id, information):
     }
 
     response = requests.post(url, params)
-    response_json = response.json()
+    response_details = response.json()
     response.raise_for_status()
-    check_status(response, response_json)
+    check_status(response, response_details)
     
-    photo = response_json["response"]
+    photo = response_details["response"]
     photo_id = photo[0]["id"]
     owner_id = photo[0]["owner_id"]
 
@@ -120,9 +120,9 @@ def upload_on_wall_comics(access_token, group_id, comments, photo_id, owner_id):
     }
 
     response = requests.post(url, params)
-    response_json = response.json()
+    response_details = response.json()
     response.raise_for_status()
-    check_status(response, response_json)
+    check_status(response, response_details)
 
 
 def main():
